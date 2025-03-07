@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background Remover</title>
+  <style>
+    /* Full-screen background image */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('../static/images/bk.webp') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    /* Main container with a semi-transparent background */
+    .container {
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 20px 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 500px;
+      position: relative;
+      background-image: linear-gradient(blue, yellow);
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+    
+    #image-upload {
+      margin-bottom: 15px;
+      font-size: 1em;
+    }
+    
+    /* Style for buttons */
+    #remove-bg-btn,
+    #download-btn {
+      padding: 12px 25px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s;
+      margin: 10px 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    #remove-bg-btn:hover,
+    #download-btn:hover {
+      background-color: #45a049;
+    }
+    
+    #bg-color {
+      padding: 8px;
+      font-size: 1em;
+      border-radius: 5px;
+      margin: 10px 5px;
+      display: none;
+    }
+
+    #output-image {
+      max-width: 100%;
+      z-index: 10;
+      height: auto;
+      border: 2px solid #ddd;
+      padding: 5px;
+      background-color: white;
+      border-radius: 8px;
+      display: none;
+      margin-top: 20px;
+    }
+    
+    #input-image {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #aaa;
+      padding: 5px;
+      border-radius: 8px;
+      display: none;
+      margin-top: 10px;
+    }
+    
+    /* Bottom colored bar to show the chosen background color */
+    #color-display {
+      width: 100%;
+      z-index: 10;
+      border-radius: 0 0 10px 10px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    /* Mobile adjustments for a comfortable touch experience */
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px 20px 30px;
+      }
+      h1 {
+        font-size: 1.6em;
+      }
+      #remove-bg-btn,
+      #download-btn {
+        font-size: 0.9em;
+        padding: 10px 20px;
+      }
+      #bg-color option{
+        font-size: 0.9em;
+        
+        
+      }
+    }
+    
+    
+    .insta,
+    .facebook {
+      position: fixed;
+      z-index: 5;
+      transition: all 0.3s ease;
+    }
+
+    .insta {
+      top: 130px;
+      left: 20px;
+      width: 50px;
+      border-radius: 50px;
+    }
+
+    .facebook {
+      top: 120px;
+      left: 80px;
+      width: 67px;
+      border-radius: 0px;
+    }
+
+    /* For improved accessibility on mobile */
+    @media (max-width: 480px) {
+      .insta {
+        left: 10px;
+      }
+      .facebook {
+        left: 70px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <a href="https://www.instagram.com/m_u_s_h_e_e_r_/" target="_blank">
+    <img class="insta" src="../static/images/insta.jpg" alt="">
+  </a>
+  <a href="https://www.facebook.com/musheer.a.12" target="_blank">
+    <img class="facebook" src="../static/images/fb.png" alt="">
+  </a>
+
+  <div class="container">
+    <h1>Background Remover</h1>
+    <input type="file" id="image-upload" accept="image/*" />
+    <br />
+    <img id="input-image" alt="Input Image Preview" />
+    <br />
+    <button id="remove-bg-btn">Remove Background</button>
+    <br />
+    <div class="output-div"><img id="output-image" alt="Background Removed Image" /></div>
+    <br />
+    <select id="bg-color">
+      <option value="">-- Choose Background Color --</option>
+      <option style="background-color:red ;" value="red">Red</option>
+      <option style="background-color: green;" value="green">Green</option>
+      <option style="background-color: black;" value="black">Black</option>
+      <option style="background-color:blue ;" value="blue">Blue</option>
+      <option style="background-color:yellow ;" value="yellow">Yellow</option>
+      <option style="background-color:white ;" value="white">White</option>
+      <option style="background-color: #FFB6C1;" value="#FFB6C1">Light Pink</option>
+      <option style="background-color: #F08080;" value="#F08080">Light Coral</option>
+      <option style="background-color: #FFFACD;" value="#FFFACD">Lemon Chiffon</option>
+      <option style="background-color: #AFEEEE;" value="#AFEEEE">Pale Turquoise</option>
+      <option style="background-color: #B0E0E6;" value="#B0E0E6">Powder Blue</option>
+      <option style="background-color: #20B2AA;" value="#20B2AA">Light Sea Green</option>
+      <option style="background-color: #9370DB;" value="#9370DB">Medium Purple</option>
+      <option style="background-color: #FAFAD2;" value="#FAFAD2">Light Goldenrod Yellow</option>
+      <option style="background-color: #FFE4E1;" value="#FFE4E1">Misty Rose</option>
+      <option style="background-color: #FFF0F5;" value="#FFF0F5">Lavender Blush</option>
+      <option style="background-color: #F0F8FF;" value="#F0F8FF">Alice Blue</option>
+      <option style="background-color: #F0FFF0;" value="#F0FFF0">Honeydew</option>
+      <option style="background-color: #F5FFFA;" value="#F5FFFA">Mint Cream</option>
+      <option style="background-color: #F0FFFF;" value="#F0FFFF">Azure</option>
+      <option style="background-color: #E0FFFF;" value="#E0FFFF">Light Cyan</option>
+      <option style="background-color: #F5F5DC;" value="#F5F5DC">Beige</option>
+      <option style="background-color: #FFFFF0;" value="#FFFFF0">Ivory</option>
+      <option style="background-color: #E6E6FA;" value="#E6E6FA">Lavender</option>
+      <option style="background-color: #FFEFD5;" value="#FFEFD5">Papaya Whip</option>
+      <option style="background-color: #FFEBCD;" value="#FFEBCD">Blanched Almond</option>
+      <option style="background-color: #98FB98;" value="#98FB98">Pale Green</option>
+      <option style="background-color: #FFFFE0;" value="#FFFFE0">Light Yellow</option>
+      <option style="background-color: #D8BFD8;" value="#D8BFD8">Thistle</option>
+      <option style="background-color: #B0C4DE;" value="#B0C4DE">Light Steel Blue</option>
+    </select>
+    <br />
+    <a id="download-btn" style="display: none;">Download Image</a>
+    <div id="color-display"></div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById("image-upload");
+    const inputImage = document.getElementById("input-image");
+    const removeBgBtn = document.getElementById("remove-bg-btn");
+    const downloadBtn = document.getElementById("download-btn");
+    const outputImage = document.getElementById("output-image");
+    const bgColorSelect = document.getElementById("bg-color");
+    const colorDisplay = document.getElementById("color-display");
+
+    // Update the API_URL to point to the correct endpoint
+    const API_URL = "http://127.0.0.1:5000/remove-background"; // Ensure this is correct
+
+    let currentBlobUrl = "";
+
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                inputImage.src = e.target.result;
+                inputImage.style.display = "block";
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            inputImage.style.display = "none";
+        }
+    });
+
+    removeBgBtn.addEventListener("click", async () => {
+        if (!fileInput.files.length) {
+            alert("Please upload an image first.");
+            return;
+        }
+
+        removeBgBtn.disabled = true;
+        removeBgBtn.textContent = "Removing...";
+        outputImage.style.display = "none";
+        downloadBtn.style.display = "none";
+        bgColorSelect.style.display = "none";
+        colorDisplay.style.display = "none";
+
+        const formData = new FormData();
+        formData.append("image", fileInput.files[0]);
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to remove background. Try again.");
+            }
+
+            const blob = await response.blob();
+            currentBlobUrl = URL.createObjectURL(blob);
+            outputImage.src = currentBlobUrl;
+            outputImage.style.display = "block";
+            bgColorSelect.style.display = "inline-block";
+            downloadBtn.href = currentBlobUrl;
+            downloadBtn.download = "output.png";
+            downloadBtn.style.display = "inline-block";
+        } catch (error) {
+            console.error("Error:", error);
+            alert(error.message);
+        } finally {
+            removeBgBtn.disabled = false;
+            removeBgBtn.textContent = "Remove Background";
+        }
+    });
+
+    bgColorSelect.addEventListener("change", () => {
+        if (!bgColorSelect.value) {
+            outputImage.src = currentBlobUrl;
+            downloadBtn.href = currentBlobUrl;
+            colorDisplay.style.display = "none";
+            return;
+        }
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        img.src = currentBlobUrl;
+        img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.fillStyle = bgColorSelect.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+
+            const dataURL = canvas.toDataURL("image/png");
+            outputImage.src = dataURL;
+            downloadBtn.href = dataURL;
+            colorDisplay.style.backgroundColor = bgColorSelect.value;
+            colorDisplay.style.display = "block";
+        };
+    });
+</script> 
+</body>
+</html>

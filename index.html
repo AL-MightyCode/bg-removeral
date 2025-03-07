@@ -1,0 +1,49 @@
+// Ensure API_URL is correct
+const API_URL = "http://127.0.0.1:5000/remove-background";
+
+removeBgBtn.addEventListener("click", async () => {
+    if (!fileInput.files.length) {
+        alert("Please upload an image first.");
+        return;
+    }
+
+    removeBgBtn.disabled = true;
+    removeBgBtn.textContent = "Removing...";
+    outputImage.style.display = "none";
+    downloadBtn.style.display = "none";
+    bgColorSelect.style.display = "none";
+    colorDisplay.style.display = "none";
+
+    const formData = new FormData();
+    formData.append("image", fileInput.files[0]);
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to remove background. Try again.");
+        }
+
+        const blob = await response.blob();
+        currentBlobUrl = URL.createObjectURL(blob);
+        outputImage.src = currentBlobUrl;
+        outputImage.style.display = "block";
+        bgColorSelect.style.display = "inline-block";
+        downloadBtn.href = currentBlobUrl;
+
+        // Set the filename for download
+        const originalFilename = fileInput.files[0].name.split('.').slice(0, -1).join('.');
+        downloadBtn.download = `${originalFilename}_no_bg.png`;
+
+        downloadBtn.style.display = "inline-block";
+    } catch (error) {
+        console.error("Error:", error);
+        alert(error.message);
+    } finally {
+        removeBgBtn.disabled = false;
+        removeBgBtn.textContent = "Remove Background";
+    }
+}); 
